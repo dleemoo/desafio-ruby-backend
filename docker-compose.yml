@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  cnab-app:
+    image: dleemoo/cnab-app:0.0.1
+    container_name: cnab-app
+    command: bundle exec puma
+    env_file:
+      - .env
+    ports:
+      - 9292:9292
+    volumes:
+      - .:/app
+      - gems_home:/gems
+      - user_home:/home/app
+    tty: true
+    stdin_open: true
+    depends_on:
+      - pgdb12
+
+  pgdb12:
+    image: postgres:12.0
+    volumes:
+      - pgdb12-data:/var/lib/postgresql/data
+
+volumes:
+  gems_home:
+    name: cnab-app-gems-home
+  user_home:
+    name: cnab-app-user-home
+  pgdb12-data:
+    name: cnab-app-pg-data

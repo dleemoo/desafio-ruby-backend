@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+PG_ADDRESS=$(echo $DATABASE_URL | sed s/'\/[a-z_]*$'//g)
+TEST_DB=$(echo $TEST_DATABASE_URL | sed s/'^.*\/\([a-z_]*\)$'/'\1'/g)
+DEV_DB=$(echo $DATABASE_URL | sed s/'^.*\/\([a-z_]*\)$'/'\1'/g)
+
+echo "CREATE DATABASE $TEST_DB" | psql $PG_ADDRESS
+echo "CREATE DATABASE $DEV_DB" | psql $PG_ADDRESS
+
+bundle install
+
+# ensure the migration of tables
+bundle exec sequel -m db/migrations $TEST_DATABASE_URL
+bundle exec sequel -m db/migrations $DATABASE_URL

@@ -1,3 +1,65 @@
+# Setup
+
+Está incluso um `docker-compose.yml` com tudo que é necessário para rodar a aplicação.
+O `Dockerfile` que foi usado está disponível no repositório em no diretório `/docker`.
+
+Para o correto funcionamento deste setup é necessário que o usuário tenha o UID
+`1000` na máqina local (normalmente é o padrão das distribuições linux). Sem
+isso, alguns problemas de permissão deverão aparecer.
+
+A imagem em questão já está disponível no dockerhub e portanto não é necessário
+fazer o build da mesma.
+
+O primeiro passo é configurar o ambiente local:
+
+```
+cp .example.env .env
+```
+
+A configuração incluida deverá funcionar 100% com o setup do docker e a priori
+não é necessário editar nada. Podemos fazer um pull das imagens necessárias:
+
+```
+docker-compose pull
+```
+
+Isso obterá a imagem do postgres (se necessário) e da aplicação. Neste momento,
+podemos fazer o install do bundle, criar os bancos de testes e desenvolvimento
+e executar as migrations:
+
+
+```
+docker-compose run --rm cnab-app bin/setup
+```
+
+Vale observer que o script anterior pode ser executado sem que o postgres
+esteja inicializado (principalmente na primeira execução, quando o diretório de
+dados do pg será configurado) Nesse caso, repetir o script deverá resolver (já
+que o postgres já estará configurado no docker).
+
+Para executar os specs, fazemos:
+
+```
+docker-compose run --rm cnab-app bundle exec rspec
+```
+
+Para executar o servidor localmente:
+
+```
+docker-compose up
+```
+
+A applicação estará disponível em `http://localhost:9292`.
+
+## Nota
+
+Para executar diretamente no localhost o caminho mais fácil é:
+
+1. Configurar o banco (pg12) e atualizar o arquivo `.env`.
+2. Possivelmente usar o dotenv fará com que os passos anteriores funcionem.
+3. Executar o servidor com `dotenv bundle exec rackup`
+
+
 # Desafio programação - para vaga Back-end
 
 Por favor leiam este documento do começo ao fim, com muita atenção.

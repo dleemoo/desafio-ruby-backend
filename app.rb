@@ -10,5 +10,7 @@ class App < Roda
   route do |r|
     r.on("cnab") { r.run Apps::Cnab }
     r.on("reports") { r.run Apps::Report }
+
+    r.root { r.redirect("reports/transactions-by-store") }
   end
 end
