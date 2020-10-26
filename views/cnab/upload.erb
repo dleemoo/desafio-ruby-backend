@@ -1,0 +1,27 @@
+<form method="POST" enctype="multipart/form-data" class="ui form">
+  <div class="field">
+    <input name="file" type="hidden" value="<%= @cnab_import&.cached_file_data %>" />
+    <input name="file" type="file" required="true" accept="text/plain" class="ui" />
+  </div>
+
+  <div class="field">
+    <input class="ui button" type="submit" value="Upload" />
+  </div>
+</form>
+
+<% if @result&.failure? %>
+  <div class="ui error message">
+    <div class="header"><p>Invalid CNAB file</p></div>
+    <p>Error count: <b><%= @result.failure.select(&:failure?).count %></b></p>
+
+    <ul>
+      <% @result.failure.each.with_index do |entry, index| %>
+        <% next if entry.success? %>
+        <li>
+          Line <b><%= index + 1 %></b>
+          <pre><%= JSON.pretty_generate(entry.failure.errors.to_h) %></pre>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

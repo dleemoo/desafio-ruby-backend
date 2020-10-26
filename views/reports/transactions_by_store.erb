@@ -1,0 +1,26 @@
+<table class="ui striped table">
+  <thead>
+    <th>Name</th>
+    <th>Owner</th>
+    <th>Total Amount</th>
+    <th>Actions</th>
+  </tr></thead>
+  <tbody>
+    <% @stores.each do |store| %>
+      <% details_id = "store-details-#{ store.id }" %>
+      <tr>
+        <td data-label="Name"><%= store.name %></td>
+        <td data-label="Owner"><%= store.owner %></td>
+        <td data-label="Total Amount"><%= format("%0.2f", @amount_by_store[store.id] || 0) %></td>
+        <td data-label="Actions">
+          <a href="#" onclick="document.getElementById('<%= details_id %>').classList.toggle('hide')">Details</a>
+        </td>
+      </tr>
+      <tr id="<%= details_id %>" class="hide">
+        <td colspan="4">
+          <%== render "reports/transactions_table", locals: { transactions: store.transactions } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,24 @@
+<table class="ui grey very compact table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Amount</th>
+      <th>Type</th>
+      <th>Identity Number</th>
+      <th>Card Number</th>
+      <th>Timestamp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% transactions.each do |transaction| %>
+      <tr>
+        <td><%= transaction.id %></td>
+        <td><%= format("%0.2f", transaction.amount) %></td>
+        <td><%= transaction.type %></td>
+        <td><%= transaction.identity_number %></td>
+        <td><%= transaction.card_number %></td>
+        <td><%= transaction.timestamp %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

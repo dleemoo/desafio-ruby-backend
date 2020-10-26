@@ -1,0 +1,6 @@
+<% link = ->(href, text) { "<a href='#{href}' class='item #{href == request.path ? 'active' : nil}'>#{text}</a>" } %>
+
+<div class="ui pointing menu">
+  <%== link.call("/reports/transactions-by-store", "Transactions by store") %>
+  <%== link.call("/cnab/upload", "CNAB upload") %>
+</div>
