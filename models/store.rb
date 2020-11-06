@@ -5,7 +5,7 @@ module Models
     one_to_many :transactions
 
     def self.listing
-      order(Sequel.desc(:name))
+      eager(:transactions).order(Sequel.desc(:name))
     end
 
     def self.amount_by_store

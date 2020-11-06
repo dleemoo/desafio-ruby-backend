@@ -9,7 +9,7 @@ module Apps
     route do |r|
       r.get "transactions-by-store" do
         @amount_by_store = stores.amount_by_store
-        @stores = stores.eager(:transactions)
+        @stores = stores.listing
         view "reports/transactions_by_store"
       end
     end
