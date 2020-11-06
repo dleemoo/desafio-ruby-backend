@@ -16,7 +16,7 @@ module Contracts
       end
     end
 
-    rule(:amount) { values[:amount] = -value if [2, 3, 9].include?(values[:type]) }
+    rule(:amount) { values[:amount] = -value if DEBIT_TRANSACTIONS.include?(values[:type]) }
     rule(:type) { values[:type] = TRANSACTION_TYPES[value] }
 
     TRANSACTION_TYPES = {
@@ -31,6 +31,8 @@ module Contracts
       9 => "Aluguel"
     }.freeze
 
-    private_constant :TRANSACTION_TYPES
+    DEBIT_TRANSACTIONS = [2, 3, 9].freeze
+
+    private_constant :TRANSACTION_TYPES, :DEBIT_TRANSACTIONS
   end
 end
