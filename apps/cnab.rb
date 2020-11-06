@@ -3,6 +3,7 @@
 module Apps
   class Cnab < Roda
     plugin :render, escape: true
+    plugin :halt
 
     include Import["cnab.upload", "cnab.process_import"]
 
@@ -19,7 +20,7 @@ module Apps
 
         @result
           .fmap { r.redirect "/reports/transactions-by-store" }
-          .or { r.halt [422, {}, [view("cnab/upload")]] }
+          .or { r.halt 422, view("cnab/upload") }
       end
     end
   end
