@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/shrinerb/shrine-rom.git
+  revision: ae03262caae86d21ae3984a1ae5ea4f35dee69f8
+  ref: ae03262
+  specs:
+    shrine-rom (0.1.0)
+      rom (~> 5.0)
+      shrine (>= 3.0.0.rc, < 4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -83,8 +92,37 @@ GEM
     puma (5.0.2)
       nio4r (~> 2.0)
     rack (2.2.3)
+    rake (13.0.1)
     roda (3.37.0)
       rack
+    rom (5.2.4)
+      rom-changeset (~> 5.2, >= 5.2.3)
+      rom-core (~> 5.2, >= 5.2.3)
+      rom-repository (~> 5.2, >= 5.2.2)
+    rom-changeset (5.2.3)
+      dry-core (~> 0.4)
+      rom-core (~> 5.2)
+      transproc (~> 1.0, >= 1.1.0)
+    rom-core (5.2.3)
+      concurrent-ruby (~> 1.1)
+      dry-container (~> 0.7)
+      dry-core (~> 0.4)
+      dry-equalizer (~> 0.2)
+      dry-inflector (~> 0.1)
+      dry-initializer (~> 3.0, >= 3.0.1)
+      dry-struct (~> 1.0)
+      dry-types (~> 1.0)
+      transproc (~> 1.0, >= 1.1.0)
+    rom-repository (5.2.2)
+      dry-core (~> 0.4)
+      dry-initializer (~> 3.0, >= 3.0.1)
+      rom-core (~> 5.2, >= 5.2.2)
+    rom-sql (3.2.0)
+      dry-core (~> 0.4)
+      dry-equalizer (~> 0.2)
+      dry-types (~> 1.0)
+      rom-core (~> 5.2, >= 5.2.1)
+      sequel (>= 4.49)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -99,10 +137,14 @@ GEM
       rspec-support (~> 3.9.0)
     rspec-support (3.9.4)
     sequel (5.37.0)
+    sequel_pg (1.14.0)
+      pg (>= 0.18.0, != 1.2.0)
+      sequel (>= 4.38.0)
     shrine (3.3.0)
       content_disposition (~> 1.0)
       down (~> 5.1)
     tilt (2.0.10)
+    transproc (1.1.1)
 
 PLATFORMS
   ruby
@@ -118,10 +160,15 @@ DEPENDENCIES
   pry (= 0.13.1)
   puma (= 5.0.2)
   rack (= 2.2.3)
+  rake (= 13.0.1)
   roda (= 3.37.0)
+  rom (= 5.2.4)
+  rom-sql (= 3.2.0)
   rspec (= 3.9.0)
   sequel (= 5.37.0)
+  sequel_pg (= 1.14.0)
   shrine (= 3.3.0)
+  shrine-rom!
   tilt (= 2.0.10)
 
 RUBY VERSION

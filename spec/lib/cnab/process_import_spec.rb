@@ -1,19 +1,29 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require_relative "../../../lib/cnab/process_import"
 
 RSpec.describe Cnab::ProcessImport do
-  let(:process) { described_class.new }
+  subject(:process) { described_class.new }
 
-  let(:cnab_imports) { Lib["models.cnab_imports"] }
-  let(:valid_file) { Pathname(__dir__).join("valid_example.txt") }
-  let(:invalid_file) { Pathname(__dir__).join("invalid_example.txt") }
+  include Import[
+    "uploaders.text_file",
+    "repositories.cnab_imports",
+    "repositories.stores",
+    "repositories.transactions"
+  ]
 
   describe "#call" do
     context "with invalid input" do
+      let(:file) { File.open(Pathname(__dir__).join("invalid_example.txt")) }
+
       it "returns failure and entities with error details" do
-        cnab_import = cnab_imports.create(file: File.open(invalid_file))
+        upload = text_file.upload(file, :store)
+
+        cnab_import = cnab_imports
+          .root
+          .changeset(:create, file_data: upload.data)
+          .map(:add_timestamps)
+          .commit
 
         result = process.call(cnab_import.id)
 
@@ -48,19 +58,33 @@ RSpec.describe Cnab::ProcessImport do
     end
 
     context "with a valid input" do
-      it "creates the required object at the database" do
-        cnab_import = cnab_imports.create(file: File.open(valid_file))
+      let(:file) { File.open(Pathname(__dir__).join("valid_example.txt")) }
+
+      it "returns a success object" do
+        upload = text_file.upload(file, :store)
+
+        cnab_import = cnab_imports
+          .root
+          .changeset(:create, file_data: upload.data)
+          .map(:add_timestamps)
+          .commit
 
         result = process.call(cnab_import.id)
         expect(result).to be_success
       end
 
-      it "returns a success object" do
-        cnab_import = cnab_imports.create(file: File.open(valid_file))
+      it "creates the records at the database" do
+        upload = text_file.upload(file, :store)
+
+        cnab_import = cnab_imports
+          .root
+          .changeset(:create, file_data: upload.data)
+          .map(:add_timestamps)
+          .commit
 
         expect { process.call(cnab_import.id) }
-          .to change(Lib["models.stores"], :count).by(2)
-          .and change(Lib["models.transactions"], :count).by(3)
+          .to change(stores.root, :count).by(2)
+          .and change(transactions.root, :count).by(3)
       end
     end
   end

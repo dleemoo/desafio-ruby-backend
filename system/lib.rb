@@ -5,7 +5,7 @@ require "dry/system/container"
 require_relative "types"
 
 class Lib < Dry::System::Container
-  use :env
+  use :env, inferrer: -> { Types::String[ENV.fetch("ENV", "development")] }
 
   configure do |config|
     config.root = Pathname("#{__dir__}/..").expand_path
@@ -19,5 +19,7 @@ Import = Lib
   .start(:dry)
   .start(:debug)
   .start(:shrine)
-  .start(:database)
+  .start(:rom)
   .injector
+
+Lib.finalize!

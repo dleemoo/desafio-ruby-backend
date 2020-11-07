@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require_relative "../../../lib/cnab/timestamp_mapper"
 
 RSpec.describe Cnab::TimestampMapper do
   let(:mapper) { described_class.new }

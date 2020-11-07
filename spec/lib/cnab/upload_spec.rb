@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require_relative "../../../lib/cnab/upload"
 
 RSpec.describe Cnab::Upload do
   let(:uploader) { described_class.new }
+
+  let(:cnab_relation) { Lib[:rom].relations[:cnab_imports] }
 
   describe "#call" do
     it "raise error for invalid input" do
@@ -12,18 +13,14 @@ RSpec.describe Cnab::Upload do
     end
 
     it "creates a new cnab_imports record" do
-      tempfile = Tempfile.create
-
       expect do
         uploader.call(
           filename: "a.txt",
           type: "text/plain",
           name: "file",
-          tempfile: tempfile
+          tempfile: StringIO.new("some-text-file-content")
         )
-      end.to change(Lib["models.cnab_imports"], :count).by(1)
-    ensure
-      FileUtils.rm(tempfile) if File.exist?(tempfile.path)
+      end.to change(cnab_relation, :count).by(1)
     end
   end
 end

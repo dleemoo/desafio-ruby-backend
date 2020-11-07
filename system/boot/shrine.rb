@@ -7,17 +7,32 @@ Lib.boot(:shrine) do
   end
 
   start do
-    Shrine.storages = {
-      cache: Shrine::Storage::FileSystem.new("public", prefix: "uploads/cache"),
-      store: Shrine::Storage::FileSystem.new("public", prefix: "uploads")
-    }
+    if Lib.env == "test"
+      require "shrine/storage/memory"
+      Shrine.storages = {
+        cache: Shrine::Storage::Memory.new,
+        store: Shrine::Storage::Memory.new
+      }
+    else
+      Shrine.storages = {
+        cache: Shrine::Storage::FileSystem.new("public", prefix: "uploads/cache"),
+        store: Shrine::Storage::FileSystem.new("public", prefix: "uploads")
+      }
+    end
 
-    Shrine.plugin :sequel
-    Shrine.plugin :cached_attachment_data
-    Shrine.plugin :restore_cached_data
+    Shrine.plugin :rom
     Shrine.plugin :rack_file
     Shrine.plugin :determine_mime_type
+    Shrine.plugin :validation_helpers
 
-    register "uploaders.text_file", Class.new(Shrine)::Attachment
+    class TextFileUploader < Shrine
+      Attacher.validate do
+        validate_extension %w[txt text]
+        validate_mime_type %w[text/plain]
+      end
+    end
+
+    register "uploaders.text_file", TextFileUploader
+    register "uploaders.text_file_attacher", TextFileUploader::Attacher
   end
 end

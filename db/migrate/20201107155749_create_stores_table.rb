@@ -1,7 +1,7 @@
 # frozen-string-literal: true
 
-Sequel.migration do
-  up do
+ROM::SQL.migration do
+  change do
     create_table(:stores) do
       primary_key :id
       Time   :created_at, null: false
@@ -12,6 +12,4 @@ Sequel.migration do
       unique %i[name owner]
     end
   end
-
-  down { drop_table(:stores) }
 end

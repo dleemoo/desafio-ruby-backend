@@ -15,12 +15,11 @@ module Apps
       r.post "upload" do
         # NOTE: we are doing a upload and file processing inside http request here.
         # Out of scope add some backgorund job for now, but already using two steps.
-        @cnab_import = upload.call(r.params["file"])
-        @result = process_import.call(@cnab_import.id)
-
-        @result
-          .fmap { r.redirect "/reports/transactions-by-store" }
-          .or { r.halt 422, view("cnab/upload") }
+        (@cnab_import = upload.call(r.params["file"])).bind do
+          (@result = process_import.call(@cnab_import.value!)).fmap do
+            r.redirect "/reports/transactions-by-store"
+          end
+        end.or { r.halt 422, view("cnab/upload") }
       end
     end
   end

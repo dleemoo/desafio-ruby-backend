@@ -3,11 +3,10 @@
 module Cnab
   class ProcessImport
     include Import[
-      :db,
       "cnab.entry_mapper",
-      "models.cnab_imports",
-      "models.stores",
-      "models.transactions"
+      "repositories.cnab_imports",
+      "repositories.stores",
+      "repositories.transactions"
     ]
 
     def call(cnab_import_id)
@@ -19,19 +18,20 @@ module Cnab
     end
 
     def create_transactions(entries)
-      db.transaction do
+      stores.transaction do
         entries.map do |entry|
           attrs = entry.value!.to_h
           store = create_or_find_store(attrs[:store])
-          transactions.create(
-            attrs.reject { |key, _| key == :store }.merge(store_id: store.id)
-          )
+          transactions.root.changeset(
+            :create, attrs.reject { |key, _| key == :store }.merge(store_id: store.id)
+          ).map(:add_timestamps).commit
         end
       end
     end
 
     def create_or_find_store(name:, owner:)
-      stores.find(name: name, owner: owner) || stores.create(name: name, owner: owner)
+      stores.root.where(name: name, owner: owner).one ||
+        stores.root.changeset(:create, name: name, owner: owner).map(:add_timestamps).commit
     end
 
     def read_entries_from(cnab_import_id)
@@ -39,7 +39,12 @@ module Cnab
     end
 
     def file_contents(cnab_import_id)
-      cnab_imports[cnab_import_id].file.read.split("\n")
+      (Lib["entities.cnab_import"] rescue nil)
+
+      cnab_import = cnab_imports.root.by_pk(cnab_import_id).one
+      entity = Entities::CnabImport.new(file_data: cnab_import.file_data)
+
+      entity.file.read.split("\n")
     end
   end
 end

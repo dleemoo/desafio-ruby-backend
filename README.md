@@ -29,13 +29,14 @@ e executar as migrations:
 
 
 ```
+docker-compose up -d pgdb12
 docker-compose run --rm cnab-app bin/setup
 ```
 
-Vale observer que o script anterior pode ser executado sem que o postgres
-esteja inicializado (principalmente na primeira execução, quando o diretório de
-dados do pg será configurado) Nesse caso, repetir o script deverá resolver (já
-que o postgres já estará configurado no docker).
+Vale observer que se o script `bin/setup` for executado sem que o postgres
+tenha sido iniciado o script poderá falhar. Isso é vulnerável especialmente na
+primeira execução quando o volume de dados do postgres ainda não foi
+configurado no container.
 
 Para executar os specs, fazemos:
 

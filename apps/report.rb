@@ -4,7 +4,7 @@ module Apps
   class Report < Roda
     plugin :render, escape: true
 
-    include Import["models.stores"]
+    include Import["repositories.stores"]
 
     route do |r|
       r.get "transactions-by-store" do

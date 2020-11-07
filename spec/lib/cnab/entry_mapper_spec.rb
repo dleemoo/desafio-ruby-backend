@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require_relative "../../../lib/cnab/entry_mapper"
 
 RSpec.describe Cnab::EntryMapper do
   let(:mapper) { described_class.new }

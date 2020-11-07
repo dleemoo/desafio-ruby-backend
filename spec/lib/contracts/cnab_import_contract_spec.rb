@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require_relative "../../../lib/contracts/cnab_import_contract"
 
 RSpec.describe Contracts::CnabImportContract do
   let(:contract) { described_class.new }
