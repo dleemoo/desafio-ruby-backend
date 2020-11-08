@@ -12,13 +12,7 @@ module Cnab
 
       return Dry::Monads::Failure(attacher.errors) unless attacher.validate
 
-      Dry::Monads::Success(
-        cnab_imports
-        .root
-        .changeset(:create, file_data: attacher.data)
-        .map(:add_timestamps)
-        .commit
-      )
+      Dry::Monads::Success(cnab_imports.create(file_data: attacher.data))
     end
   end
 end

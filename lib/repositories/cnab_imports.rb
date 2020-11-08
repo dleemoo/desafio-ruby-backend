@@ -6,5 +6,9 @@ module Repositories
 
     struct_namespace Entities
     auto_struct true
+
+    def create(input)
+      cnab_imports.command(:create_cnab_import, result: :one).call(input).first
+    end
   end
 end
