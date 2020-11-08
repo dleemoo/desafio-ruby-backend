@@ -1,5 +1,7 @@
+# rubocop version: 1.2.0
 AllCops:
   TargetRubyVersion: 2.7.2
+  NewCops: enable
 
 Style/Documentation:
   Enabled: false
