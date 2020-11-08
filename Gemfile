@@ -30,4 +30,5 @@ group :development, :test do
   gem "pry", "0.13.1"
   gem "rspec", "3.9.0"
   gem "database_cleaner-sequel", "1.8.0"
+  gem "rom-factory", "0.10.2"
 end

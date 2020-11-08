@@ -6,7 +6,14 @@ ENV["ENV"] = "test"
 
 require_relative "../system/lib"
 
+require "rom-factory"
 require "database_cleaner/sequel"
+
+Factory = ROM::Factory.configure do |config|
+  config.rom = Lib[:rom]
+end
+
+Pathname.glob("#{__dir__}/factories/**/*.rb").each(&method(:require))
 
 DatabaseCleaner[:sequel].strategy = :transaction
 
